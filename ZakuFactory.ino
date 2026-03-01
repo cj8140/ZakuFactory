@@ -3,7 +3,7 @@
 //Elehobby3 Coding P4 Zaku Factory V1.0 2026.03.01 By C.j. Park
 
 #define DELAY_CRANE 30
-#define DELAY_BRIDGE 10
+#define DELAY_BRIDGE 20
 #define DELAY_LIFT 40
 
 #include <Servo.h>
@@ -134,13 +134,6 @@ void setup()
 
   pinMode(SW_MONITOR, INPUT_PULLUP);
   pinMode(SW_DOME, INPUT_PULLUP);
-
-  // digitalWrite(LED_3F_MONITOR, HIGH);
-  // digitalWrite(LED_LIFT_MONITOR, HIGH);
-  // digitalWrite(LED_CRANE_MONITOR, HIGH);
-  // digitalWrite(LED_BRIDGE_MONITOR, HIGH);
-  
-  
   
 
   ws_eye[0] = CRGB(255, 255, 0);
