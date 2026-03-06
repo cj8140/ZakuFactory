@@ -3,6 +3,8 @@
 //Elehobby3 Coding P4 Zaku Factory V1.0 2026.03.01 By C.j. Park
 //Elehobby3 Coding P4 Zaku Factory V1.1 2026.03.02 By Kypji Park ; Change bridge1 angle close 134->170, open 51->87 ; Crane 왼쪽붙이기 ; Motor1,2 Analog Write
 //Elehobby3 Coding P4 Zaku Factory V1.2 2026.03.02 By C.J.Park Bridge Angle Adjust, Blinking Cockpit Light.
+//Elehobby3 Coding P4 Zaku Factory V1.3 2026.03.03 By C.J.Park 브릿지 노이즈 방어 로직 수정
+//Elehobby3 Coding P4 Zaku Factory V1.4 2026.03.06 By Kyoji Angle adjust. ServoBridge2 82->78 ; ServoLift 79->70
 
 #define DELAY_CRANE 30
 #define DELAY_BRIDGE 20
@@ -26,14 +28,14 @@ Servo ServoCrane;             //D10 LOW 49, [HIGH 105]
 #define LED_LIFT_MONITOR 33  //100ohm/yellow wire
 #define LED_LIFT_RED1 34     //220ohm/red wire
 #define LED_LIFT_RED2 35     //220ohm/red wire
-Servo ServoLift;             //D9 [LOW 0], HIGH 79
+Servo ServoLift;             //D9 [LOW 0], HIGH 70
 
 //BRIDGE(Cockpit Access Panel)
 #define LED_BRIDGE_MONITOR 51  //100ohm/blue wire
 #define LED_BRIDGE_RED1 52     //220ohm/red wire
 #define LED_BRIDGE_RED2 53     //220ohm/red wire
 Servo ServoBridge1;            //D46 CLOSE 170, [OPEN 90]
-Servo ServoBridge2;            //D45 CLOSE 82, [OPEN 21]
+Servo ServoBridge2;            //D45 CLOSE 78, [OPEN 21]
 
 //Body
 #define LED_DOME 6     //220ohm/white wire
@@ -56,7 +58,7 @@ Servo ServoTorch;          //D44 LOW 52, [HIGH 103]
 #define SW_MONITOR A4    // Cockpit Monitor LED White
 #define POT_HATCH A5     // Hatch Servo ; Close(Servo Angle88 / Open(Servo Angle 132)
 #define POT_BRIDGE A6    // Bridge Servo ; Undock BRIDGE1(CLOSE 170, [OPEN 87]) / BRIDGE2(D45 CLOSE 78, [OPEN 17])
-#define POT_LIFT A7      // LIFT Servo [LOW 0], HIGH 79
+#define POT_LIFT A7      // LIFT Servo [LOW 0], HIGH 70
 #define SW_JOY_HOIST 24  // CRANE Servo UP LOW 49, [HIGH 105]
 #define SW_JOY_LOWER 25  // CRANE Servo UP LOW 49, [HIGH 105]
 #define SW_JOY_LEFT 26   // CRANE Motor
@@ -70,13 +72,12 @@ unsigned long lastCraneTime = 0;
 int hatch_state = 0;
 int prev_hatch_state = 0;
 
-float smooth_pot = 1023;
-
+float bridge_smooth_pot = 1023;
 int bridge1Angle = 90;
 int bridge1WantedAngle = 90;
 unsigned long lastBridgeTime = 0;
 
-int prev_pot_lift_value = 3;
+float lift_smooth_pot = 0;
 int liftAngle = 0;
 int liftWantedAngle = 0;
 unsigned long lastLiftTime = 0;
@@ -105,9 +106,9 @@ void setup()
   ServoBridge1.attach(46);
   ServoBridge1.write(90);  // CLOSE 170, [OPEN 90]
   ServoBridge2.attach(45);
-  ServoBridge2.write(21);  // CLOSE 82, [OPEN 21]
+  ServoBridge2.write(21);  // CLOSE 78, [OPEN 21]
   ServoLift.attach(9);
-  ServoLift.write(0);  // [LOW 0], HIGH 79
+  ServoLift.write(0);  // [LOW 0], HIGH 70
   ServoTorch.attach(44);
   ServoTorch.write(103);  // LOW 52, [HIGH 103]
   ServoCrane.attach(10);
@@ -272,9 +273,9 @@ void loop()
 
 
   //Bridge DOCK-679 UNDOCK-1023
-  smooth_pot = (0.2 * analogRead(POT_BRIDGE)) + (0.8 * smooth_pot);
+  bridge_smooth_pot = (0.1 * analogRead(POT_BRIDGE)) + (0.9 * bridge_smooth_pot);
 
-  bridge1WantedAngle = map((int)smooth_pot, 679, 1023, 170, 90);
+  bridge1WantedAngle = map((int)bridge_smooth_pot, 679, 1023, 170, 90);
 
 
   if (bridge1Angle != bridge1WantedAngle && (millis() - lastBridgeTime) > DELAY_BRIDGE) {
@@ -284,8 +285,7 @@ void loop()
     if (bridge1Angle < bridge1WantedAngle) bridge1Angle++;
     else bridge1Angle--;
     ServoBridge1.write(bridge1Angle);
-    Serial.println(bridge1Angle);
-    ServoBridge2.write(map(bridge1Angle, 170, 90, 82, 21));
+    ServoBridge2.write(map(bridge1Angle, 170, 90, 78, 21));
     lastBridgeTime = millis();
   }
   if (bridge1Angle == bridge1WantedAngle) {
@@ -301,11 +301,10 @@ void loop()
 
 
   //Lift DOWN 3 ~ 1023 Up
-  int pot_lift_value = analogRead(POT_LIFT);
-  if (abs(prev_pot_lift_value - pot_lift_value) > 5) {
-    liftWantedAngle = map(pot_lift_value, 3, 1023, 0, 79);
-    prev_pot_lift_value = pot_lift_value;
-  }
+  
+  lift_smooth_pot = (0.1 * analogRead(POT_LIFT)) + (0.9 * lift_smooth_pot);
+  liftWantedAngle = map((int)lift_smooth_pot, 3, 1023, 0, 70);
+
   if (liftAngle != liftWantedAngle && (millis() - lastLiftTime) > DELAY_LIFT) {
     digitalWrite(LED_LIFT_RED1, (millis() / 150) % 2);
     digitalWrite(LED_LIFT_RED2, (millis() / 150 + 0) % 2);
@@ -319,7 +318,7 @@ void loop()
     digitalWrite(LED_LIFT_RED1, LOW);
     digitalWrite(LED_LIFT_RED2, LOW);
   }
-  if (liftAngle > 76) {
+  if (liftAngle > 65) {
     digitalWrite(LED_LIFT_MONITOR, HIGH);
   }
   else {
