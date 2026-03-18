@@ -196,7 +196,7 @@ void loop()
   
   //Hall Sensor 상태 저장 변수, 0은 Air, 1은 Neck, 2는 3F, 이전 상태 저장 변수
   
-  static int prev_state_hall = 0b11;
+  static int prev_state_hall = 0b00;  //불가능상태(두 홀센서 모두 켜짐) 으로 초기화
   //3F 센서를 2의 자리로, 목 센서를 1의 자리로 해서 홀센서 상태를 저장
   int state_hall = (digitalRead(HALL_3F) << 1) | digitalRead(HALL_NECK);
   
