@@ -4,7 +4,7 @@ Servo my_servo;
 
 void setup()
 {
-  my_servo.attach(11);  //핀 연결
+  my_servo.attach(9);  //핀 연결
   my_servo.write(45);
 
   pinMode(2, INPUT_PULLUP);
