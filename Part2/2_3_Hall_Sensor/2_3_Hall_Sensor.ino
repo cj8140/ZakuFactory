@@ -1,4 +1,5 @@
 int state = 0;  //0이면 3, 1이면 5켜기
+int detected = 0;
 
 void setup()
 {
@@ -10,17 +11,19 @@ void setup()
 void loop()
 {
   if (digitalRead(2) == LOW) {  // 자석 감지하면 LOW신호(Active LOW)
-    // v 대체 가능 v
-    if(state == 0) {
-      state = 1;
+    if(detected == 0) {
+      detected = 1;
+      if(state == 0) {
+        state = 1;
+      }
+      else {
+        state = 0;
+      }
+      delay(200);
     }
-    else {
-      state = 0;
-    }
-    // ^ 대체 코드 ^
-    // state = !state;
-
-    delay(500);
+  }
+  else {
+    detected = 0;
   }
 
   if (state == 0) {  
