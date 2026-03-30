@@ -23,12 +23,12 @@ void loop()
   Serial.print(distance);
   Serial.println(" cm"); //줄바꿈, cm추가
 
-  if (distance < 10) {  //10미만
+  if (distance <= 10) {  //0~10
     digitalWrite(3, HIGH);
     digitalWrite(5, HIGH);
   }
 
-  else if (distance < 20) {  //10미만이 아닌, 20미만 즉 10이상 20미만
+  else if (distance <= 20) {  //11~20
     digitalWrite(3, HIGH);
     digitalWrite(5, LOW);
   }
