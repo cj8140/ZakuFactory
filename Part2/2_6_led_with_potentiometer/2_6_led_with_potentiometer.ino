@@ -1,5 +1,3 @@
-//Part 2. LED with Potentiometer
-
 void setup()
 {
   Serial.begin(9600);  // Serial 시작. 안전한 보드레이트는 9600으로 설정
