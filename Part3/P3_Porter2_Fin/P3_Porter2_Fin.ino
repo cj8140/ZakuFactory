@@ -1,4 +1,8 @@
 //Elehobby3 Coding P3 Porter2 V1.0 2025.05.08 By CJ Park, Fin Code by Kyoji Park 25.10.20
+
+#define PERIOD_BLINK 500
+#define DURATION__ON 200
+
 #define PIN_RELAY 2
 
 #define PIN_SW_LEFT 4
@@ -39,7 +43,7 @@ void loop()
     hazardOn = !hazardOn;
     delay(300);
   }
-  bool timing = (millis() % 800) / 400 && HIGH;  //%(전체 시간), /(꺼져있는 시간)
+  bool timing = (millis() % PERIOD_BLINK) < DURATION_ON;  //%(전체 시간), <(켜져있는 시간)
 
   bool leftSign = !digitalRead(PIN_SW_LEFT);
   bool rightSign = !digitalRead(PIN_SW_RIGHT);

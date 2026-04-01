@@ -1,8 +1,8 @@
 #define LED1 2
 #define LED2 3
 
-#define DURATION_BLINK 500
-#define DURATION_FADING 1000
+#define PERIOD_BLINK 500
+#define PERIOD_FADING 1000
 
 void setup()
 {
@@ -12,6 +12,6 @@ void setup()
 
 void loop()
 {
-  digitalWrite(LED1, (millis() / (DURATION_BLINK / 2)) % 2);                  //DURATION_BLINK/2 만큼 켜지고 DURATION_BLINK/2 만큼 꺼지고
-  analogWrite(LED2, (int)((sin(2.0 * PI * millis() / DURATION_FADING) + 1.0) * 127.5));
+  digitalWrite(LED1, (millis() / (PERIOD_BLINK/2)) % 2);                  //PERIOD_BLINK/2 만큼 켜지고 PERIOD_BLINK/2 만큼 꺼지고
+  analogWrite(LED2, (int)((sin(TWO_PI * millis() / (float)PERIOD_FADING) + 1.0) * 127.5));
 }

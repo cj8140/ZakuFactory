@@ -9,11 +9,11 @@
 
 //Elehobby3 Coding P4 Zaku Factory V1.6 2026.03.011 By C.J.Park 네이밍 수정, 주석 추가
 
-#define DELAY_CRANE 30
-#define DELAY_HATCH 20
-#define DELAY_BRIDGE 20
-#define DELAY_LIFT 40
-#define DELAY_ALARM 150
+#define DURATION_CRANE 30     //만큼 켜지고 만큼 꺼지고
+#define DURATION_HATCH 20
+#define DURATION_BRIDGE 20
+#define DURATION_LIFT 40
+#define DURATION_ALARM 150
 
 #include <Servo.h>
 #include <DFPlayer_Mini_Mp3.h>
@@ -172,13 +172,12 @@ void loop()
   static int angle_crane = 105;
   static long last_crane_time = 0;
 
-  //깡 delay 써서 쉬운코드로 바꾸는 것이 가능할수도 -------------------------------------------------------------------------------------------------------
-  if (digitalRead(SW_JOY_HOIST) == LOW && millis() - last_crane_time > DELAY_CRANE && angle_crane < 105) {
+  if (digitalRead(SW_JOY_HOIST) == LOW && millis() - last_crane_time > DURATION_CRANE && angle_crane < 105) {
     last_crane_time = millis();
     angle_crane++;
     servo_crane.write(angle_crane);
   }
-  else if (digitalRead(SW_JOY_LOWER) == LOW && millis() - last_crane_time > DELAY_CRANE && angle_crane > 49) {
+  else if (digitalRead(SW_JOY_LOWER) == LOW && millis() - last_crane_time > DURATION_CRANE && angle_crane > 49) {
     last_crane_time = millis();
     angle_crane--;
     servo_crane.write(angle_crane);
@@ -186,8 +185,8 @@ void loop()
 
   //Crane 조이스틱 작동시 레드 LED 깜빡임
   if (digitalRead(SW_JOY_HOIST) == LOW || digitalRead(SW_JOY_LOWER) == LOW || digitalRead(SW_JOY_LEFT) == LOW || digitalRead(SW_JOY_RIGHT) == LOW) {
-    digitalWrite(LED_CRANE_RED1, (millis() / DELAY_ALARM) % 2);
-    digitalWrite(LED_CRANE_RED2, (millis() / DELAY_ALARM) % 2);
+    digitalWrite(LED_CRANE_RED1, (millis() / DURATION_ALARM) % 2);
+    digitalWrite(LED_CRANE_RED2, (millis() / DURATION_ALARM) % 2);
   }
   else {
     digitalWrite(LED_CRANE_RED1, LOW);
@@ -267,7 +266,7 @@ void loop()
       if (digitalRead(SW_DOME) == LOW) digitalWrite(LED_DOME, i / 7 % 2);
       if (digitalRead(SW_MONITOR) == LOW) digitalWrite(LED_MONITOR, i / 7 % 2);
       servo_hatch.write(i);
-      delay(DELAY_HATCH);
+      delay(DURATION_HATCH);
     }
   }
   //열기
@@ -278,7 +277,7 @@ void loop()
       if (digitalRead(SW_DOME) == LOW) digitalWrite(LED_DOME, i / 7 % 2);
       if (digitalRead(SW_MONITOR) == LOW) digitalWrite(LED_MONITOR, i / 7 % 2);
       servo_hatch.write(i);
-      delay(DELAY_HATCH);
+      delay(DURATION_HATCH);
     }
     mp3_play(9);  // MonoEye
   }
@@ -298,10 +297,10 @@ void loop()
   //목표 각도 설정
   wanted_angle_bridge1 = map((int)filtered_pot_bridge, 679, 1023, 170, 90);
 
-  //목표 각도와 현재 각도가 다르고, 마지막으로 각도를 변경한 지 DELAY_BRIDGE 시간이 지났다면 각도 변경
-  if (angle_bridge1 != wanted_angle_bridge1 && (millis() - last_bridge_time) > DELAY_BRIDGE) {
-    digitalWrite(LED_BRIDGE_RED1, (millis() / DELAY_ALARM) % 2);
-    digitalWrite(LED_BRIDGE_RED2, (millis() / DELAY_ALARM) % 2);
+  //목표 각도와 현재 각도가 다르고, 마지막으로 각도를 변경한 지 DURATION_BRIDGE 시간이 지났다면 각도 변경
+  if (angle_bridge1 != wanted_angle_bridge1 && (millis() - last_bridge_time) > DURATION_BRIDGE) {
+    digitalWrite(LED_BRIDGE_RED1, (millis() / DURATION_ALARM) % 2);
+    digitalWrite(LED_BRIDGE_RED2, (millis() / DURATION_ALARM) % 2);
 
     if (angle_bridge1 < wanted_angle_bridge1) angle_bridge1++;
     else angle_bridge1--;
@@ -331,9 +330,9 @@ void loop()
   filtered_pot_lift = (0.1 * analogRead(POT_LIFT)) + (0.9 * filtered_pot_lift);
   wanted_angle_lift = map((int)filtered_pot_lift, 3, 1023, 0, 70);
 
-  if (angle_lift != wanted_angle_lift && (millis() - last_lift_time) > DELAY_LIFT) {
-    digitalWrite(LED_LIFT_RED1, (millis() / DELAY_ALARM) % 2);
-    digitalWrite(LED_LIFT_RED2, (millis() / DELAY_ALARM) % 2);
+  if (angle_lift != wanted_angle_lift && (millis() - last_lift_time) > DURATION_LIFT) {
+    digitalWrite(LED_LIFT_RED1, (millis() / DURATION_ALARM) % 2);
+    digitalWrite(LED_LIFT_RED2, (millis() / DURATION_ALARM) % 2);
 
     if (angle_lift < wanted_angle_lift) angle_lift++;
     else angle_lift--;
