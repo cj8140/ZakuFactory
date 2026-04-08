@@ -6,7 +6,7 @@
 #define PIN_IR_LEFT 4
 
 Servo servo_head;                   //Left 141 Center 96 Right 51
-Servo servo_head;                  //Down 35 Center 90 Over 145
+Servo servo_waist;                  //Down 35 Center 90 Over 145
 
 void setup() {
   pinMode(PIN_IR_RIGHT, INPUT);
@@ -14,9 +14,9 @@ void setup() {
   pinMode(PIN_IR_LEFT, INPUT);
 
   servo_head.attach(9);
-  servo_head.attach(10);
+  servo_waist.attach(10);
   servo_head.write(96);
-  servo_head.write(90);
+  servo_waist.write(90);
 }
 
 void loop() {
@@ -29,12 +29,12 @@ void loop() {
 
 //Bow-Start--------------
     for(int i = 90; i >= 35; i--) {
-      servo_head.write(i);
+      servo_waist.write(i);
       delay(10);
     }
     delay(500);
     for(int i = 35; i <= 90; i++) {
-      servo_head.write(i);
+      servo_waist.write(i);
       delay(10);
     }
 //Bow-End--------------
@@ -48,12 +48,12 @@ void loop() {
   if(digitalRead(PIN_IR_CENTER) == LOW) { //Sensing CENTER----
 //Bow-Start--------------
     for(int i = 90; i >= 35; i--) {
-      servo_head.write(i);
+      servo_waist.write(i);
       delay(10);
     }
     delay(500);
     for(int i = 35; i <= 90; i++) {
-      servo_head.write(i);
+      servo_waist.write(i);
       delay(10);
     }
 //Bow-End--------------
@@ -68,12 +68,12 @@ void loop() {
 
 //Bow-Start--------------
     for(int i = 90; i >= 35; i--) {
-      servo_head.write(i);
+      servo_waist.write(i);
       delay(10);
     }
     delay(500);
     for(int i = 35; i <= 90; i++) {
-      servo_head.write(i);
+      servo_waist.write(i);
       delay(10);
     }
 //Bow-End--------------
