@@ -28,12 +28,12 @@ void setup() {
 void loop() {
   if( digitalRead(PIN_SW_MODE)  == LOW) {
     for(int i = 0; i < NUM_LEDS; i++) {
-      int value_noise = inoise8(millis()/2 + i*1000);
+      int value_noise = inoise8(i*10, millis()/4);
       if(digitalRead(PIN_SW_COLOR) == LOW) {
         leds[i] = CRGB(value_noise, value_noise, value_noise);
       }
       else {
-        leds[i] = CRGB(value_noise, (int)(value_noise*0.6), (int)(value_noise * 0.05));
+        leds[i] = CRGB(value_noise, (int)(value_noise*0.5), (int)(value_noise * 0.05));
       }
       // Serial.println(nois_value);
     }
