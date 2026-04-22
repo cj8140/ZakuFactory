@@ -8,13 +8,13 @@
 #define PIN_LED_YELLOW3 12
 
 void setup() {
+  pinMode(PIN_TRIG, OUTPUT);
+  pinMode(PIN_ECHO, INPUT);
   pinMode(PIN_IN1, OUTPUT);
   pinMode(PIN_IN2, OUTPUT);
   pinMode(PIN_LED_YELLOW1, OUTPUT);
   pinMode(PIN_LED_YELLOW2, OUTPUT);
   pinMode(PIN_LED_YELLOW3, OUTPUT);
-  pinMode(PIN_TRIG, OUTPUT);
-  pinMode(PIN_ECHO, INPUT);
 
   Serial.begin(9600);
   Serial.println("Starting");  
