@@ -41,10 +41,8 @@ void loop()
     state_hazard = !state_hazard;
     delay(300);
   }
+  
   bool light_on = (millis() / DURATION_BLINK) % 2 ;
-
-  bool state_left = !digitalRead(PIN_SW_LEFT);
-  bool state_right = !digitalRead(PIN_SW_RIGHT);
 
   if (state_hazard) {
     if (light_on) {
@@ -59,7 +57,7 @@ void loop()
     }
   }
 
-  else if (state_left) {
+  else if (digitalRead(PIN_SW_LEFT) == LOW) {
     if (light_on) {
       digitalWrite(PIN_LED_LEFT, HIGH);
       digitalWrite(PIN_LED_RIGHT, LOW);
@@ -71,10 +69,10 @@ void loop()
     }
   }
 
-  else if (state_right) {
+  else if (digitalRead(PIN_SW_RIGHT) == LOW) {
     if (light_on) {
-      digitalWrite(PIN_LED_RIGHT, HIGH);
       digitalWrite(PIN_LED_LEFT, LOW);
+      digitalWrite(PIN_LED_RIGHT, HIGH);
       digitalWrite(PIN_RELAY, HIGH);
     }
     else {
@@ -84,8 +82,8 @@ void loop()
   }
 
   else {
-      digitalWrite(PIN_LED_RIGHT, LOW);
       digitalWrite(PIN_LED_LEFT, LOW);
+      digitalWrite(PIN_LED_RIGHT, LOW);
       digitalWrite(PIN_RELAY, LOW);
   }
 }
