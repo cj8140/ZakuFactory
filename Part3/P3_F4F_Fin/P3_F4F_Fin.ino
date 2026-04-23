@@ -32,8 +32,9 @@ void loop() {
   int distance = duration * 0.017; // 측정단위 줄이기
   
   if(duration == 0) { //Timeout 발생  
-    distance = 99;
+    distance = 30;
   }
+  
   distance = constrain(distance, 10, 30);
   int speed = map(distance, 10, 30, 255, 0);  //speed 범위 조정
 
