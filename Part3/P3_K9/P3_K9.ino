@@ -17,8 +17,8 @@ void setup()
   servo_turret.write(angle_turret);
   servo_barrel.write(angle_barrel);
 
-  servo_barrel.attach(9);
-  servo_turret.attach(10);
+  servo_turret.attach(9);
+  servo_barrel.attach(10);
 }
 
 void loop()
