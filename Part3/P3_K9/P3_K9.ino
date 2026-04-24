@@ -14,8 +14,8 @@ void setup()
 {
   pinMode(PIN_JOY_SW, INPUT_PULLUP);
 
-  servo_turret.write(98);
-  servo_barrel.write(99);
+  servo_turret.write(angle_turret);
+  servo_barrel.write(angle_barrel);
 
   servo_barrel.attach(9);
   servo_turret.attach(10);
