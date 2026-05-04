@@ -2,21 +2,17 @@
 
 #define PIN_SW_COLOR 2
 #define PIN_SW_MODE 4
-
 #define PIN_LED 6       // LED 스트립 연결 핀
+
 #define NUM_LEDS 20     // LED 개수
 #define BRIGHTNESS 255  // 밝기 (0~255)
 
-
 CRGB leds[NUM_LEDS];
-
 int value[NUM_LEDS];
 int delta[NUM_LEDS];
 
 void setup()
 {
-  Serial.begin(9600);
-
   pinMode(PIN_SW_COLOR, INPUT_PULLUP);
   pinMode(PIN_SW_MODE, INPUT_PULLUP);
 
@@ -50,7 +46,6 @@ void loop()
         value[i] = 250;
         delta[i] = -20;
       }
-
       if (digitalRead(PIN_SW_COLOR) == LOW) {
         leds[i] = CRGB(value[i], value[i], value[i]);
       }
