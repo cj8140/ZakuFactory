@@ -30,10 +30,10 @@ void loop() {
         leds[i] = CRGB(value_noise, value_noise, value_noise);
       }
       else {
-        int r = noiseValue;
-        int g = noiseValue * 0.5;   // 초록 50%
-        int b = noiseValue * 0.05;  // 파랑  5%
-        leds[i] = CRGB(r, g, b);
+        int RED = value_noise;
+        int GREEN = value_noise * 0.5;   // 초록 50%
+        int BLUE = value_noise * 0.05;  // 파랑  5%
+        leds[i] = CRGB(RED, GREEN, BLUE);
       }
     }
   }
