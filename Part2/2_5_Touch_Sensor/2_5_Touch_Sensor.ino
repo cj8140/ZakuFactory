@@ -12,6 +12,6 @@ void loop() {
   }
 
   if (digitalRead(2) == LOW) {
-    analogWrite(3, LOW); // 꺼짐
+    analogWrite(3, 0); // 꺼짐
   }
 }
